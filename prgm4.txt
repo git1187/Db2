@@ -1,0 +1,26 @@
+1)
+insertion
+
+2)
+
+db.employee.find().sort({ssn:-1});
+
+3)
+
+db.employee.find({depid:db.department.aggregate([{$match:{depname:'finance'}},{$project:{depid:-1}}]).toArray()[0].depid});
+
+4)
+
+db.employee.find({salary:db.employee.aggregate([{$group:{_id:null,maxsal:{$max:'$salary'}}}]).toArray()[0].maxsal})
+
+5)
+
+db.employee.update(
+    {_id:db.employee.aggregate(
+      [{$project:{count:{$size:'$workon'}}},{$sort:{'count':-1}}]).toArray()[0]._id},{$set:{"award":"Employee of the year"}
+    }
+  )
+
+6)
+
+db.employee.deleteOne({exp:db.employee.aggregate([{$group:{_id:null,minExp:{$min:'$exp'}}}]).toArray()[0].minExp})

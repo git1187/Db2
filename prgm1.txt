@@ -1,0 +1,26 @@
+1)
+select m.name,s.song_title,a.album_title from musician m,album a,song s where  m.ssn=a.producer_ssn and a.album_id=s.album_id;
+
+2)
+
+ select m.name,m.ssn from musician m where m.ssn not in(select producer_ssn from album);
+
+3)
+
+select s.*, count(p.ssn) as 'Total artists' from song s,perform p,musician m where s.song_id=p.song_id and m.ssn=p.ssn group by p.song_id having count(p.ssn)>=3;
+
+4)
+
+select i.iname,count(p.iid),count(p.iid)/(select count(*) from musician) as 'Average' from instrument i,play p where i.iid=p.iid group by p.iid;
+
+5)
+
+select distinct(a.album_title),m.name from musician m,instrument i,play p,album a where m.ssn=p.ssn and i.iid=p.iid and i.iname='Flute'
+and exists(select m.name from musician m,instrument i,play p where m.ssn=p.ssn and i.iid=p.iid and
+i.iname='Guitar')
+and a.producer_ssn in(select producer_ssn from album where no_of_songs>=(select avg(no_of_songs) from album));
+
+6)
+
+select m.*,count(p.iid) from musician m,play p where m.ssn=p.ssn group by p.ssn having count(p.iid)=(select count(*) from instrument);
+

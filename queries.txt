@@ -1,0 +1,28 @@
+4)
+
+select u.houseno,u.address,sum(i.icharge) from user u,installed_by i where u.houseno=i.houseno and u.houseno in(select distinct(u.houseno) from user u,installed_by i,panel p where u.houseno=i.houseno and p.pvmod=i.pvmod and p.paneltype="mono") and u.houseno in(select distinct(u.houseno) from user u,installed_by i,panel p where u.houseno=i.houseno and p.pvmod=i.pvmod and p.paneltype="poly") group
+by u.houseno;
+
+
+1)
+
+select v.*,count(v.tinno) as count from vendor v,installed_by i  where v.tinno=i.tinno and i.itype="domestic" group by v.tinno having count(v.tinno)>= ALL(select count(v.tinno) from vendor v,installed_by i where v.tinno=i.tinno and i.itype="domestic" group by v.tinno);
+
+
+2)
+
+select u.houseno,u.address,p.capacity from user u, panel p, installed_by i where u.houseno=i.houseno and p.pvmod=i.pvmod and p.capacity in (select max(capacity) from panel);
+
+3)
+
+select u.houseno,u.address,p.paneltype from user u, installed_by i,panel p where u.houseno=i.houseno and p.pvmod=i.pvmod and paneltype='mono';
+
+5
+select v.*,p.*,i.date from vendor v,panel p, installed_by i where v.tinno=i.tinno and p.pvmod=i.pvmod and i.date in( select min(date) from installed_by)
+)
+
+
+6)
+
+select count(s.pvmod) as 'total sales',count(s.pvmod)/(select count(*) from sold_by) as "avergage sales",p.paneltype from user u,panel p,sold_by s,installed_by i where i.pvmod=p.pvmod and i.houseno=u.houseno and s.pvmod=p.pvmod and i.itype="commercial" group by p.paneltype;
+
